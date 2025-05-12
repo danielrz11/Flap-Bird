@@ -1,7 +1,7 @@
 from funcoes import *
 
 # Loop principal
+tela_menu()
 while True:
-    tela_menu()
     jogo()
     tela_game_over()
