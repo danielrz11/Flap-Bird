@@ -55,8 +55,10 @@ def jogo():
 
         # Desenhar nave
         if nave_atual:
-            nave_rect = nave_atual.get_rect(center=(passaro_x, int(passaro_y)))
-            TELA.blit(nave_atual, nave_rect)
+            # Ajustar o tamanho da nave para 40x40 pixels
+            nave_redimensionada = pygame.transform.scale(nave_atual, (80, 80))
+            nave_rect = nave_redimensionada.get_rect(center=(passaro_x, int(passaro_y)))
+            TELA.blit(nave_redimensionada, nave_rect)
         else:
             pygame.draw.circle(TELA, AMARELO, (passaro_x, int(passaro_y)), 20)
 
@@ -87,7 +89,7 @@ def jogo():
                 canos_passados.add(cano_id)
 
         # Verificar colisões
-        passaro_rect = pygame.Rect(passaro_x - 15, passaro_y - 15, 30, 30)
+        passaro_rect = pygame.Rect(passaro_x - 20, passaro_y - 20, 40, 40)  # Hitbox de 40x40 pixels
         for cano in canos:
             cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
             cano_inferior = pygame.Rect(cano['x'], cano['base'], largura_cano, ALTURA - cano['base'])
@@ -100,10 +102,7 @@ def jogo():
         desenhar_pontuacao(TELA, pontuacao)
         pygame.display.update()
 
-    return pontuacao
-
 # Loop principal
 while True:
     tela_menu(TELA)
-    pontos = jogo()
-    tela_game_over(TELA, pontos)
+    jogo()  # Removido o retorno da pontuação já que não vamos mais mostrar a tela de game over

@@ -55,8 +55,8 @@ except FileNotFoundError:
     BG_IMG = None
 
 # Configurações do jogo
-GRAVIDADE = 0.5
-PULO = -8
+GRAVIDADE = 0.08  # Aproximadamente 1/6 da gravidade original (0.5)
+PULO = -4  # Reduzido pela metade para combinar com a gravidade menor
 VELOCIDADE_CANO = 2
 DISTANCIA_ENTRE_CANOS = 300
 LARGURA_CANO = 70

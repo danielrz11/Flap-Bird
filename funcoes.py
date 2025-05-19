@@ -122,24 +122,5 @@ def selecionar_nave(tela):
                     selecionando = False
 
 def tela_game_over(tela, pontuacao):
-    esperando = True
-    while esperando:
-        tela.fill(AZUL)
-        desenhar_texto(tela, "GAME OVER", 50, LARGURA // 2, ALTURA // 3)
-        desenhar_texto(tela, f"Pontuação: {pontuacao}", 30, LARGURA // 2, ALTURA // 2)
-        
-        # Botão para voltar ao menu
-        botao_menu = criar_botao(tela, "VOLTAR AO MENU", LARGURA//2 - 100, ALTURA//2 + 50, 200, 50, VERDE, (0, 200, 0))
-        
-        pygame.display.update()
-        
-        if botao_menu:
-            esperando = False
-            
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                pygame.quit()
-                exit()
+    # Removida a tela de game over, retorna imediatamente
+    return
