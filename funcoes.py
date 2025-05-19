@@ -47,7 +47,10 @@ def tela_menu(tela):
         tela.fill(AZUL)
         desenhar_texto(tela, "FLAPPY STAR WARS", 50, LARGURA // 2, 100)
         
-        # Criar os três botões
+        # Mostrar melhor pontuação
+        desenhar_texto(tela, f"RECORDE: {melhor_pontuacao}", 36, LARGURA // 2, 180)
+        
+        # Criar os três botões centralizados
         botao_jogar = criar_botao(tela, "JOGAR", LARGURA//2 - 100, 250, 200, 50, VERDE, (0, 200, 0))
         botao_naves = criar_botao(tela, "NAVES", LARGURA//2 - 100, 320, 200, 50, VERDE, (0, 200, 0))
         botao_funcoes = criar_botao(tela, "FUNÇÕES", LARGURA//2 - 100, 390, 200, 50, VERDE, (0, 200, 0))

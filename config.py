@@ -63,6 +63,7 @@ LARGURA_CANO = 70
 
 # Variável global para a nave selecionada
 nave_selecionada = 0
+melhor_pontuacao = 0  # Variável para armazenar a melhor pontuação
 
 def get_nave_atual():
     """Retorna a imagem da nave atualmente selecionada"""
@@ -74,4 +75,10 @@ def set_nave_selecionada(indice):
     """Define a nave selecionada"""
     global nave_selecionada
     if NAVE_IMGS:
-        nave_selecionada = indice % len(NAVE_IMGS) 
+        nave_selecionada = indice % len(NAVE_IMGS)
+
+def atualizar_melhor_pontuacao(pontuacao):
+    """Atualiza a melhor pontuação se necessário"""
+    global melhor_pontuacao
+    if pontuacao > melhor_pontuacao:
+        melhor_pontuacao = pontuacao 

@@ -81,12 +81,13 @@ def jogo():
 
         # Verificar pontuação
         for cano in canos:
-            # Cria uma identificação única para cada cano
-            cano_id = id(cano)
-            # Se o cano ainda não foi pontuado e o jogador passou por ele
-            if cano_id not in canos_passados and cano['x'] + largura_cano < passaro_x:
-                pontuacao += 1
-                canos_passados.add(cano_id)
+            # Verifica se o jogador passou pelo cano
+            if cano['x'] + largura_cano < passaro_x:
+                # Cria uma identificação única para cada cano usando sua posição inicial
+                cano_id = f"{cano['x']}_{cano['topo']}_{cano['base']}"
+                if cano_id not in canos_passados:
+                    pontuacao += 1
+                    canos_passados.add(cano_id)
 
         # Verificar colisões
         passaro_rect = pygame.Rect(passaro_x - 20, passaro_y - 20, 40, 40)  # Hitbox de 40x40 pixels
@@ -102,7 +103,11 @@ def jogo():
         desenhar_pontuacao(TELA, pontuacao)
         pygame.display.update()
 
+    return pontuacao
+
 # Loop principal
 while True:
     tela_menu(TELA)
-    jogo()  # Removido o retorno da pontuação já que não vamos mais mostrar a tela de game over
+    pontos = jogo()
+    if pontos > melhor_pontuacao:
+        melhor_pontuacao = pontos
