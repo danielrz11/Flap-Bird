@@ -48,12 +48,13 @@ def tela_menu(tela):
         desenhar_texto(tela, "FLAPPY STAR WARS", 50, LARGURA // 2, 100)
         
         # Mostrar melhor pontuação
+        melhor_pontuacao = get_melhor_pontuacao()
         desenhar_texto(tela, f"RECORDE: {melhor_pontuacao}", 36, LARGURA // 2, 180)
         
         # Criar os três botões centralizados
         botao_jogar = criar_botao(tela, "JOGAR", LARGURA//2 - 100, 250, 200, 50, VERDE, (0, 200, 0))
         botao_naves = criar_botao(tela, "NAVES", LARGURA//2 - 100, 320, 200, 50, VERDE, (0, 200, 0))
-        botao_funcoes = criar_botao(tela, "FUNÇÕES", LARGURA//2 - 100, 390, 200, 50, VERDE, (0, 200, 0))
+        botao_fundos = criar_botao(tela, "FUNDOS", LARGURA//2 - 100, 390, 200, 50, VERDE, (0, 200, 0))
         
         # Adicionar texto no canto inferior direito
         fonte = pygame.font.Font(None, 24)
@@ -68,9 +69,8 @@ def tela_menu(tela):
             esperando = False
         elif botao_naves:
             selecionar_nave(tela)
-        elif botao_funcoes:
-            # Aqui você pode adicionar a lógica para a tela de funções
-            pass
+        elif botao_fundos:
+            selecionar_fundo(tela)
             
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -121,6 +121,53 @@ def selecionar_nave(tela):
                     indice_atual = (indice_atual - 1) % len(NAVE_IMGS)
                 elif evento.key == pygame.K_RIGHT and NAVE_IMGS:
                     indice_atual = (indice_atual + 1) % len(NAVE_IMGS)
+                elif evento.key == pygame.K_ESCAPE:
+                    selecionando = False
+
+def selecionar_fundo(tela):
+    selecionando = True
+    indice_atual = fundo_selecionado
+    
+    while selecionando:
+        tela.fill(AZUL)
+        desenhar_texto(tela, "SELECIONE O FUNDO", 50, LARGURA // 2, 100)
+        
+        # Desenhar fundo atual
+        if BG_IMGS:
+            fundo_img = BG_IMGS[indice_atual]
+            # Calcular dimensões mantendo proporção 2:3
+            preview_largura = 200  # Reduzido de 300 para 200
+            preview_altura = int(preview_largura * 1.5)  # 2:3 proporção
+            # Desenhar o fundo em tamanho menor para visualização
+            fundo_preview = pygame.transform.scale(fundo_img, (preview_largura, preview_altura))
+            rect = fundo_preview.get_rect(center=(LARGURA // 2, ALTURA // 2))
+            tela.blit(fundo_preview, rect)
+            
+            # Desenhar nome do fundo
+            nome_fundo = FUNDOS[indice_atual].replace("fundo_", "").replace(".png", "").upper()
+            desenhar_texto(tela, nome_fundo, 30, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 30)
+            
+            # Desenhar instruções
+            desenhar_texto(tela, "← → para mudar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 70)
+            desenhar_texto(tela, "ENTER para confirmar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 100)
+            desenhar_texto(tela, "ESC para voltar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 130)
+        else:
+            desenhar_texto(tela, "Nenhum fundo disponível", 30, LARGURA // 2, ALTURA // 2)
+        
+        pygame.display.update()
+        
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_RETURN:
+                    set_fundo_selecionado(indice_atual)  # Salva a seleção
+                    selecionando = False
+                elif evento.key == pygame.K_LEFT and BG_IMGS:
+                    indice_atual = (indice_atual - 1) % len(BG_IMGS)
+                elif evento.key == pygame.K_RIGHT and BG_IMGS:
+                    indice_atual = (indice_atual + 1) % len(BG_IMGS)
                 elif evento.key == pygame.K_ESCAPE:
                     selecionando = False
 

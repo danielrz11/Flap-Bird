@@ -6,7 +6,7 @@ from funcoes import (
     tela_game_over, 
     criar_cano, 
     desenhar_pontuacao, 
-    AZUL, VERDE, AMARELO, get_nave_atual
+    AZUL, VERDE, AMARELO, get_nave_atual, get_fundo_atual, get_cano_atual
 )
 from config import *
 
@@ -33,13 +33,18 @@ def jogo():
 
     # Obter a nave selecionada
     nave_atual = get_nave_atual()
+    # Obter o fundo selecionado
+    fundo_atual = get_fundo_atual()
+    # Obter o cano correspondente ao fundo
+    cano_atual = get_cano_atual()
+    cano_atual_inv = pygame.transform.rotate(cano_atual, 180) if cano_atual else None
 
     while rodando:
         relogio.tick(60)
         
         # Desenhar fundo
-        if BG_IMG:
-            TELA.blit(BG_IMG, (0, 0))
+        if fundo_atual:
+            TELA.blit(fundo_atual, (0, 0))
         else:
             TELA.fill(AZUL)
 
@@ -65,11 +70,11 @@ def jogo():
         # Desenhar canos
         for cano in canos:
             cano['x'] -= velocidade_cano
-            if PIPE_IMG and PIPE_IMG_INV:
+            if cano_atual and cano_atual_inv:
                 # Cano superior
-                TELA.blit(PIPE_IMG_INV, (cano['x'], cano['topo'] - 500))
+                TELA.blit(cano_atual_inv, (cano['x'], cano['topo'] - 500))
                 # Cano inferior
-                TELA.blit(PIPE_IMG, (cano['x'], cano['base']))
+                TELA.blit(cano_atual, (cano['x'], cano['base']))
             else:
                 pygame.draw.rect(TELA, VERDE, (cano['x'], 0, largura_cano, cano['topo']))
                 pygame.draw.rect(TELA, VERDE, (cano['x'], cano['base'], largura_cano, ALTURA))
@@ -111,3 +116,4 @@ while True:
     pontos = jogo()
     if pontos > melhor_pontuacao:
         melhor_pontuacao = pontos
+        print(f"Novo recorde: {melhor_pontuacao}")  # Debug para verificar se está atualizando
