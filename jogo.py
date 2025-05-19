@@ -6,33 +6,42 @@ from funcoes import (
     tela_game_over, 
     criar_cano, 
     desenhar_pontuacao, 
-    AZUL, VERDE, AMARELO
+    AZUL, VERDE, AMARELO, get_nave_atual
 )
+from config import *
 
 # Configurações
 LARGURA, ALTURA = 400, 600
 TELA = pygame.display.set_mode((LARGURA, ALTURA))
-pygame.display.set_caption("Flappy Bird Simples")
+pygame.display.set_caption("Flappy Star Wars")
 
 def jogo():
-    gravidade = 0.5
-    pulo = -8
-    velocidade_cano = 2
-    distancia_entre_canos = 300
-    largura_cano = 70
+    gravidade = GRAVIDADE
+    pulo = PULO
+    velocidade_cano = VELOCIDADE_CANO
+    distancia_entre_canos = DISTANCIA_ENTRE_CANOS
+    largura_cano = LARGURA_CANO
     passaro_x = 50
     passaro_y = ALTURA // 2
     velocidade_y = 0
     canos = [criar_cano()]
     pontuacao = 0
-    passou_cano = False
+    canos_passados = set()  # Conjunto para rastrear canos já pontuados
 
     relogio = pygame.time.Clock()
     rodando = True
 
+    # Obter a nave selecionada
+    nave_atual = get_nave_atual()
+
     while rodando:
         relogio.tick(60)
-        TELA.fill(AZUL)
+        
+        # Desenhar fundo
+        if BG_IMG:
+            TELA.blit(BG_IMG, (0, 0))
+        else:
+            TELA.fill(AZUL)
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -43,29 +52,48 @@ def jogo():
 
         velocidade_y += gravidade
         passaro_y += velocidade_y
-        pygame.draw.circle(TELA, AMARELO, (passaro_x, int(passaro_y)), 20)
 
+        # Desenhar nave
+        if nave_atual:
+            nave_rect = nave_atual.get_rect(center=(passaro_x, int(passaro_y)))
+            TELA.blit(nave_atual, nave_rect)
+        else:
+            pygame.draw.circle(TELA, AMARELO, (passaro_x, int(passaro_y)), 20)
+
+        # Desenhar canos
         for cano in canos:
             cano['x'] -= velocidade_cano
-            pygame.draw.rect(TELA, VERDE, (cano['x'], 0, largura_cano, cano['topo']))
-            pygame.draw.rect(TELA, VERDE, (cano['x'], cano['base'], largura_cano, ALTURA))
+            if PIPE_IMG and PIPE_IMG_INV:
+                # Cano superior
+                TELA.blit(PIPE_IMG_INV, (cano['x'], cano['topo'] - 500))
+                # Cano inferior
+                TELA.blit(PIPE_IMG, (cano['x'], cano['base']))
+            else:
+                pygame.draw.rect(TELA, VERDE, (cano['x'], 0, largura_cano, cano['topo']))
+                pygame.draw.rect(TELA, VERDE, (cano['x'], cano['base'], largura_cano, ALTURA))
 
         if canos[-1]['x'] < LARGURA - distancia_entre_canos:
             canos.append(criar_cano())
         if canos[0]['x'] < -largura_cano:
             canos.pop(0)
 
+        # Verificar pontuação
         for cano in canos:
-            if not passou_cano and cano['x'] + largura_cano < passaro_x:
+            # Cria uma identificação única para cada cano
+            cano_id = id(cano)
+            # Se o cano ainda não foi pontuado e o jogador passou por ele
+            if cano_id not in canos_passados and cano['x'] + largura_cano < passaro_x:
                 pontuacao += 1
-                passou_cano = True
-        if canos[0]['x'] + largura_cano < passaro_x:
-            passou_cano = False
+                canos_passados.add(cano_id)
 
+        # Verificar colisões
+        passaro_rect = pygame.Rect(passaro_x - 15, passaro_y - 15, 30, 30)
         for cano in canos:
-            if passaro_x + 20 > cano['x'] and passaro_x - 20 < cano['x'] + largura_cano:
-                if passaro_y - 20 < cano['topo'] or passaro_y + 20 > cano['base']:
-                    rodando = False
+            cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
+            cano_inferior = pygame.Rect(cano['x'], cano['base'], largura_cano, ALTURA - cano['base'])
+            if passaro_rect.colliderect(cano_superior) or passaro_rect.colliderect(cano_inferior):
+                rodando = False
+
         if passaro_y > ALTURA or passaro_y < 0:
             rodando = False
 
@@ -78,16 +106,4 @@ def jogo():
 while True:
     tela_menu(TELA)
     pontos = jogo()
-    esperando = True
-    while esperando:
-        tela_game_over(TELA, pontos)
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_r:
-                    esperando = False
-                elif evento.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    exit()
+    tela_game_over(TELA, pontos)
