@@ -105,10 +105,10 @@ def jogo():
         if passaro_y > ALTURA or passaro_y < 0:
             rodando = False
 
-        desenhar_pontuacao(TELA, pontuacao)
+        desenhar_pontuacao(TELA, pontuacao // 25)  # Dividindo a pontuação por 25
         pygame.display.update()
 
-    return pontuacao
+    return pontuacao // 25  # Também retornando a pontuação dividida por 25
 
 # Loop principal
 while True:
