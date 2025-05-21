@@ -27,6 +27,8 @@ def jogo():
     canos = [criar_cano()]
     pontuacao = 0
     canos_passados = set()  # Conjunto para rastrear canos já pontuados
+    tiros = []  # Lista para armazenar os tiros
+    velocidade_tiro = 10  # Velocidade dos tiros
 
     relogio = pygame.time.Clock()
     rodando = True
@@ -52,11 +54,29 @@ def jogo():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
-                velocidade_y = pulo
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_SPACE:
+                    velocidade_y = pulo
+                elif evento.key == pygame.K_RIGHT:
+                    # Criar novo tiro quando a seta direita é pressionada
+                    tiros.append({
+                        'x': passaro_x + 40,  # Posição x do tiro (à direita da nave)
+                        'y': passaro_y,       # Posição y do tiro (mesma altura da nave)
+                        'largura': 20,        # Largura do tiro
+                        'altura': 5           # Altura do tiro
+                    })
 
         velocidade_y += gravidade
         passaro_y += velocidade_y
+
+        # Atualizar e desenhar tiros
+        for tiro in tiros[:]:
+            tiro['x'] += velocidade_tiro
+            # Desenhar tiro
+            pygame.draw.rect(TELA, VERDE, (tiro['x'], tiro['y'], tiro['largura'], tiro['altura']))
+            # Remover tiros que saíram da tela
+            if tiro['x'] > LARGURA:
+                tiros.remove(tiro)
 
         # Desenhar nave
         if nave_atual:
