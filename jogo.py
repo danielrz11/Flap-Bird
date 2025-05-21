@@ -73,7 +73,7 @@ def jogo():
         for tiro in tiros[:]:
             tiro['x'] += velocidade_tiro
             # Desenhar tiro
-            pygame.draw.rect(TELA, VERDE, (tiro['x'], tiro['y'], tiro['largura'], tiro['altura']))
+            pygame.draw.rect(TELA, VERMELHO, (tiro['x'], tiro['y'], tiro['largura'], tiro['altura']))
             # Remover tiros que saíram da tela
             if tiro['x'] > LARGURA:
                 tiros.remove(tiro)
