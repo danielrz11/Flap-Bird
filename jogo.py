@@ -16,6 +16,19 @@ LARGURA, ALTURA = 400, 600
 TELA = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Flappy Star Wars")
 
+# Lista para armazenar explosões
+explosoes = []
+
+def criar_explosao(x, y):
+    explosoes.append({
+        'x': x,
+        'y': y,
+        'raio': 5,
+        'max_raio': 40,
+        'velocidade': 2,
+        'alpha': 255  # Para controlar a transparência
+    })
+
 def jogo():
     gravidade = GRAVIDADE
     pulo = PULO
@@ -78,9 +91,40 @@ def jogo():
             tiro['x'] += velocidade_tiro
             # Desenhar tiro
             pygame.draw.rect(TELA, VERMELHO, (tiro['x'], tiro['y'], tiro['largura'], tiro['altura']))
+            
+            # Verificar colisão do tiro com inimigos
+            tiro_rect = pygame.Rect(tiro['x'], tiro['y'], tiro['largura'], tiro['altura'])
+            for inimigo in inimigos[:]:
+                inimigo_rect = pygame.Rect(inimigo['x'], inimigo['y'], inimigo['largura'], inimigo['altura'])
+                if tiro_rect.colliderect(inimigo_rect):
+                    # Criar explosão no centro do inimigo
+                    criar_explosao(inimigo['x'] + inimigo['largura']//2, inimigo['y'] + inimigo['altura']//2)
+                    inimigos.remove(inimigo)
+                    tiros.remove(tiro)
+                    pontuacao += 25  # Adiciona um ponto (25 pontos = 1 ponto na pontuação final)
+                    break
+            
             # Remover tiros que saíram da tela
             if tiro['x'] > LARGURA:
                 tiros.remove(tiro)
+
+        # Atualizar e desenhar explosões
+        for explosao in explosoes[:]:
+            explosao['raio'] += explosao['velocidade']
+            explosao['alpha'] -= 10  # Diminuir a transparência
+            
+            # Criar uma superfície para a explosão com transparência
+            explosao_surface = pygame.Surface((explosao['raio'] * 2, explosao['raio'] * 2), pygame.SRCALPHA)
+            pygame.draw.circle(explosao_surface, (255, 165, 0, explosao['alpha']), 
+                             (explosao['raio'], explosao['raio']), explosao['raio'])
+            
+            # Desenhar a explosão
+            TELA.blit(explosao_surface, 
+                     (explosao['x'] - explosao['raio'], explosao['y'] - explosao['raio']))
+            
+            # Remover explosão quando ela terminar
+            if explosao['raio'] >= explosao['max_raio'] or explosao['alpha'] <= 0:
+                explosoes.remove(explosao)
 
         # Spawn de inimigos
         if contador_frames >= TEMPO_MIN_INIMIGO:
@@ -148,12 +192,6 @@ def jogo():
             cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
             cano_inferior = pygame.Rect(cano['x'], cano['base'], largura_cano, ALTURA - cano['base'])
             if passaro_rect.colliderect(cano_superior) or passaro_rect.colliderect(cano_inferior):
-                rodando = False
-
-        # Verificar colisão com inimigos
-        for inimigo in inimigos:
-            inimigo_rect = pygame.Rect(inimigo['x'], inimigo['y'], inimigo['largura'], inimigo['altura'])
-            if passaro_rect.colliderect(inimigo_rect):
                 rodando = False
 
         if passaro_y > ALTURA or passaro_y < 0:
