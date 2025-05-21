@@ -88,8 +88,8 @@ def jogo():
                 inimigos.append({
                     'x': LARGURA,
                     'y': random.randint(50, ALTURA - 50),
-                    'largura': 40,
-                    'altura': 40
+                    'largura': 80,
+                    'altura': 80
                 })
                 contador_frames = 0
 
@@ -98,7 +98,8 @@ def jogo():
             inimigo['x'] -= VELOCIDADE_INIMIGO  # Usando a nova velocidade do inimigo
             # Desenhar inimigo
             if INIMIGO_IMG:
-                TELA.blit(INIMIGO_IMG, (inimigo['x'], inimigo['y']))
+                inimigo_redimensionado = pygame.transform.scale(INIMIGO_IMG, (80, 80))
+                TELA.blit(inimigo_redimensionado, (inimigo['x'], inimigo['y']))
             else:
                 pygame.draw.rect(TELA, VERMELHO, (inimigo['x'], inimigo['y'], inimigo['largura'], inimigo['altura']))
             # Remover inimigos que saíram da tela
