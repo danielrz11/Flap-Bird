@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 # Configurações da tela
 LARGURA = 400
@@ -17,8 +18,14 @@ PRETO = (0, 0, 0)
 GRAVIDADE = 0.08  # Aproximadamente 1/6 da gravidade original (0.5)
 PULO = -4  # Reduzido pela metade para combinar com a gravidade menor
 VELOCIDADE_CANO = 2
+VELOCIDADE_INIMIGO = 2.5  # Velocidade ligeiramente maior que os canos
 DISTANCIA_ENTRE_CANOS = 300
 LARGURA_CANO = 70  # Aumentado de 70 para 100
+
+# Configurações dos inimigos
+PROBABILIDADE_INIMIGO = 0.02  # 2% de chance de spawnar um inimigo a cada frame
+TEMPO_MIN_INIMIGO = 60  # Frames mínimos entre inimigos
+TEMPO_MAX_INIMIGO = 180  # Frames máximos entre inimigos
 
 # Carregando imagens
 ASSETS_DIR = "assets"
@@ -27,7 +34,6 @@ ASSETS_DIR = "assets"
 NAVES = [
     "nave_xwing.png",
     "nave_mileniumfalcon.png",
-    "nave_cacaTIE.png",
     "nave_cinza.png",
     "nave_laranja.png"
 ]
@@ -57,6 +63,18 @@ except FileNotFoundError as e:
 except pygame.error as e:
     print(f"Erro do Pygame ao carregar imagens: {e}")
     NAVE_IMGS = []
+
+# Carregando imagem do inimigo
+try:
+    INIMIGO_IMG = pygame.image.load(os.path.join(ASSETS_DIR, "inimigo_cacaTIE.png"))
+    INIMIGO_IMG = pygame.transform.scale(INIMIGO_IMG, (40, 40))
+    print("Imagem do inimigo carregada com sucesso!")
+except FileNotFoundError:
+    print("Imagem do inimigo não encontrada. Usando retângulo vermelho como placeholder.")
+    INIMIGO_IMG = None
+except pygame.error as e:
+    print(f"Erro do Pygame ao carregar imagem do inimigo: {e}")
+    INIMIGO_IMG = None
 
 # Carregando imagens dos fundos
 BG_IMGS = []

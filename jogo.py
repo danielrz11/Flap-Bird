@@ -1,4 +1,5 @@
 import pygame
+import random
 pygame.init()  # Inicializa antes de qualquer uso de fonte
 
 from funcoes import (
@@ -29,6 +30,8 @@ def jogo():
     canos_passados = set()  # Conjunto para rastrear canos já pontuados
     tiros = []  # Lista para armazenar os tiros
     velocidade_tiro = 10  # Velocidade dos tiros
+    inimigos = []  # Lista para armazenar os inimigos
+    contador_frames = 0  # Contador para controlar o spawn de inimigos
 
     relogio = pygame.time.Clock()
     rodando = True
@@ -43,6 +46,7 @@ def jogo():
 
     while rodando:
         relogio.tick(60)
+        contador_frames += 1
         
         # Desenhar fundo
         if fundo_atual:
@@ -77,6 +81,29 @@ def jogo():
             # Remover tiros que saíram da tela
             if tiro['x'] > LARGURA:
                 tiros.remove(tiro)
+
+        # Spawn de inimigos
+        if contador_frames >= TEMPO_MIN_INIMIGO:
+            if random.random() < PROBABILIDADE_INIMIGO:
+                inimigos.append({
+                    'x': LARGURA,
+                    'y': random.randint(50, ALTURA - 50),
+                    'largura': 40,
+                    'altura': 40
+                })
+                contador_frames = 0
+
+        # Atualizar e desenhar inimigos
+        for inimigo in inimigos[:]:
+            inimigo['x'] -= VELOCIDADE_INIMIGO  # Usando a nova velocidade do inimigo
+            # Desenhar inimigo
+            if INIMIGO_IMG:
+                TELA.blit(INIMIGO_IMG, (inimigo['x'], inimigo['y']))
+            else:
+                pygame.draw.rect(TELA, VERMELHO, (inimigo['x'], inimigo['y'], inimigo['largura'], inimigo['altura']))
+            # Remover inimigos que saíram da tela
+            if inimigo['x'] < -inimigo['largura']:
+                inimigos.remove(inimigo)
 
         # Desenhar nave
         if nave_atual:
@@ -120,6 +147,12 @@ def jogo():
             cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
             cano_inferior = pygame.Rect(cano['x'], cano['base'], largura_cano, ALTURA - cano['base'])
             if passaro_rect.colliderect(cano_superior) or passaro_rect.colliderect(cano_inferior):
+                rodando = False
+
+        # Verificar colisão com inimigos
+        for inimigo in inimigos:
+            inimigo_rect = pygame.Rect(inimigo['x'], inimigo['y'], inimigo['largura'], inimigo['altura'])
+            if passaro_rect.colliderect(inimigo_rect):
                 rodando = False
 
         if passaro_y > ALTURA or passaro_y < 0:
