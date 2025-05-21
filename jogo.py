@@ -134,6 +134,7 @@ def jogo():
 while True:
     tela_menu(TELA)
     pontos = jogo()
+    set_melhor_pontuacao(pontos)
     if pontos > melhor_pontuacao:
         melhor_pontuacao = pontos
         print(f"Novo recorde: {melhor_pontuacao}")  # Debug para verificar se está atualizando
