@@ -17,7 +17,7 @@ GRAVIDADE = 0.08  # Aproximadamente 1/6 da gravidade original (0.5)
 PULO = -4  # Reduzido pela metade para combinar com a gravidade menor
 VELOCIDADE_CANO = 2
 DISTANCIA_ENTRE_CANOS = 300
-LARGURA_CANO = 100  # Aumentado de 70 para 100
+LARGURA_CANO = 70  # Aumentado de 70 para 100
 
 # Carregando imagens
 ASSETS_DIR = "assets"
