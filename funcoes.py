@@ -1,6 +1,7 @@
 import pygame
 import random
 from config import *
+import os
 
 # Cores
 AZUL = (135, 206, 235)
@@ -43,13 +44,23 @@ def criar_botao(tela, texto, x, y, largura, altura, cor_normal, cor_hover):
 
 def tela_menu(tela):
     esperando = True
+    # Carregar imagem de fundo do menu
+    try:
+        fundo_menu = pygame.image.load(os.path.join("assets", "tela de início.png"))
+        fundo_menu = pygame.transform.scale(fundo_menu, (LARGURA, ALTURA))
+    except:
+        fundo_menu = None
+
     while esperando:
-        tela.fill(AZUL)
-        desenhar_texto(tela, "FLAPPY STAR WARS", 50, LARGURA // 2, 100)
+        # Desenhar fundo do menu
+        if fundo_menu:
+            tela.blit(fundo_menu, (0, 0))
+        else:
+            tela.fill(AZUL)
         
-        # Mostrar melhor pontuação
+        # Mostrar melhor pontuação na parte inferior
         melhor_pontuacao = get_melhor_pontuacao()
-        desenhar_texto(tela, f"RECORDE: {melhor_pontuacao}", 36, LARGURA // 2, 180)
+        desenhar_texto(tela, f"RECORDE: {melhor_pontuacao}", 36, LARGURA // 2, ALTURA - 50)
         
         # Criar os três botões centralizados
         botao_jogar = criar_botao(tela, "JOGAR", LARGURA//2 - 100, 250, 200, 50, VERDE, (0, 200, 0))

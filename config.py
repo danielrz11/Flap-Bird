@@ -40,12 +40,18 @@ NAVES = [
 
 # Lista de fundos disponíveis
 FUNDOS = [
-    "fundo_estrela da morte.png"
+    "fundo_estrela da morte.png",
+    "fundo_planeta_vermellho.png",
+    "fundo_planeta_laranja.png",
+    "fundo_planeta_azul.png"
 ]
 
 # Lista de canos correspondentes aos fundos
 CANOS = [
-    "cano_estrela da morte.png"
+    "cano_estrela da morte.png",
+    "cano_estrela da morte.png",  # Usando o mesmo cano para os planetas
+    "cano_estrela da morte.png",  # Usando o mesmo cano para os planetas
+    "cano_estrela da morte.png"   # Usando o mesmo cano para os planetas
 ]
 
 # Carregando imagens das naves
