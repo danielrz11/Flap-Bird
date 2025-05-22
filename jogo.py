@@ -60,6 +60,7 @@ def jogo():
     while rodando:
         relogio.tick(60)
         contador_frames += 1
+        velocidade_cano += 0.001
         
         # Desenhar fundo
         if fundo_atual:
