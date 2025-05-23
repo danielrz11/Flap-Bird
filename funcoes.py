@@ -9,10 +9,105 @@ VERDE = (0, 200, 0)
 AMARELO = (255, 255, 0)
 PRETO = (0, 0, 0)
 
+# Lista para armazenar explosões
+explosoes = []
+
+# Lista para armazenar explosões pendentes
+explosoes_pendentes = []
+
+# Inicializar o sistema de música
+pygame.mixer.init()
+
+# Carregar músicas e efeitos sonoros
+try:
+    pygame.mixer.music.load(os.path.join("assets", "inicial.mp3"))
+    pygame.mixer.music.set_volume(0.5)  # Volume em 50%
+except:
+    print("Erro ao carregar música inicial")
+
+# Carregar som do blaster
+try:
+    som_blaster = pygame.mixer.Sound(os.path.join("assets", "blaster.mp3"))
+    som_blaster.set_volume(0.3)  # Volume em 30%
+except:
+    print("Erro ao carregar som do blaster")
+    som_blaster = None
+
+# Carregar som da explosão
+try:
+    som_explosao = pygame.mixer.Sound(os.path.join("assets", "explosion_old.mp3"))
+    som_explosao.set_volume(0.3)  # Volume em 30%
+    print("Som da explosão carregado com sucesso!")  # Debug print
+except Exception as e:
+    print(f"Erro ao carregar som da explosão: {e}")  # Debug print com erro específico
+    som_explosao = None
+
+def tocar_som_blaster():
+    if som_blaster:
+        try:
+            som_blaster.play()
+        except:
+            print("Erro ao tocar som do blaster")
+
+def tocar_som_explosao():
+    if som_explosao:
+        try:
+            # Adiciona o tempo atual + 300ms à lista de explosões pendentes
+            explosoes_pendentes.append(pygame.time.get_ticks() + 300)
+            print("Explosão agendada!")  # Debug print
+        except Exception as e:
+            print(f"Erro ao agendar som da explosão: {e}")  # Debug print com erro específico
+    else:
+        print("Som da explosão não está disponível!")  # Debug print
+
+def atualizar_sons_explosao():
+    tempo_atual = pygame.time.get_ticks()
+    # Verifica todas as explosões pendentes
+    for tempo_explosao in explosoes_pendentes[:]:
+        if tempo_atual >= tempo_explosao:
+            try:
+                som_explosao.play()
+                print("Som da explosão tocado!")  # Debug print
+            except Exception as e:
+                print(f"Erro ao tocar som da explosão: {e}")  # Debug print com erro específico
+            explosoes_pendentes.remove(tempo_explosao)
+
+def iniciar_musica_menu():
+    try:
+        pygame.mixer.music.load(os.path.join("assets", "inicial.mp3"))
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play(-1)  # -1 significa loop infinito
+    except:
+        print("Erro ao iniciar música do menu")
+
+def iniciar_musica_jogo():
+    try:
+        pygame.mixer.music.load(os.path.join("assets", "música do bar.mp3"))
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play(-1)  # -1 significa loop infinito
+    except:
+        print("Erro ao iniciar música do jogo")
+
+def parar_musica():
+    try:
+        pygame.mixer.music.stop()
+    except:
+        print("Erro ao parar música")
+
 def criar_cano():
     abertura = 200  # Espaço entre os canos
     y = random.randint(abertura + 50, ALTURA - 50)
     return {'x': LARGURA, 'topo': y - abertura, 'base': y}
+
+def criar_explosao(explosoes, x, y):
+    explosoes.append({
+        'x': x,
+        'y': y,
+        'raio': 5,
+        'max_raio': 40,
+        'velocidade': 2,
+        'alpha': 255  # Para controlar a transparência
+    })
 
 def desenhar_texto(tela, texto, tamanho, x, y):
     fonte = pygame.font.Font(None, tamanho)
@@ -44,6 +139,9 @@ def criar_botao(tela, texto, x, y, largura, altura, cor_normal, cor_hover):
 
 def tela_menu(tela):
     esperando = True
+    # Iniciar música de fundo do menu
+    iniciar_musica_menu()
+    
     # Carregar imagem de fundo do menu
     try:
         fundo_menu = pygame.image.load(os.path.join("assets", "tela de início.png"))
@@ -77,6 +175,8 @@ def tela_menu(tela):
         
         # Verificar cliques nos botões
         if botao_jogar:
+            parar_musica()  # Parar música do menu
+            iniciar_musica_jogo()  # Iniciar música do jogo
             esperando = False
         elif botao_naves:
             selecionar_nave(tela)
@@ -85,9 +185,11 @@ def tela_menu(tela):
             
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
+                parar_musica()  # Parar música ao sair
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+                parar_musica()  # Parar música ao sair
                 pygame.quit()
                 exit()
 
@@ -122,6 +224,7 @@ def selecionar_nave(tela):
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
+                parar_musica()  # Parar música ao sair
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN:
@@ -169,6 +272,7 @@ def selecionar_fundo(tela):
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
+                parar_musica()  # Parar música ao sair
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN:
