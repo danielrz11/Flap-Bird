@@ -2,18 +2,10 @@ import pygame
 import random
 pygame.init()  # Inicializa antes de qualquer uso de fonte
 
-from funcoes import (
-    tela_menu, 
-    tela_game_over, 
-    criar_cano, 
-    desenhar_pontuacao, 
-    AZUL, VERDE, AMARELO, get_nave_atual, get_fundo_atual, get_cano_atual,
-    criar_explosao, tocar_som_blaster, tocar_som_explosao, atualizar_sons_explosao  # Adicionando a função de atualização dos sons
-)
+from funcoes import *
 from config import *
 
 # Configurações
-LARGURA, ALTURA = 400, 600
 TELA = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Flappy Star Wars")
 
@@ -162,7 +154,7 @@ def jogo():
             # Desenhar nave
             if nave_atual:
                 try:
-                    nave_redimensionada = pygame.transform.scale(nave_atual, (80, 80))
+                    nave_redimensionada = nave_atual
                     nave_rect = nave_redimensionada.get_rect(center=(passaro_x, int(passaro_y)))
                     TELA.blit(nave_redimensionada, nave_rect)
                 except:
@@ -202,7 +194,9 @@ def jogo():
                         canos_passados.add(cano_id)
 
             # Verificar colisões
-            passaro_rect = pygame.Rect(passaro_x - 20, passaro_y - 20, 40, 40)
+            
+            largura, altura = nave_atual.get_size()
+            passaro_rect = pygame.Rect(passaro_x - largura/2, passaro_y - altura/2, largura, altura)
             for cano in canos:
                 cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
                 cano_inferior = pygame.Rect(cano['x'], cano['base'], largura_cano, ALTURA - cano['base'])
@@ -228,4 +222,4 @@ while True:
     set_melhor_pontuacao(pontos)
     if pontos > melhor_pontuacao:
         melhor_pontuacao = pontos
-        print(f"Novo recorde: {melhor_pontuacao}")  # Debug para verificar se está atualizando
+        print(f"Novo recorde: {melhor_pontuacao}")

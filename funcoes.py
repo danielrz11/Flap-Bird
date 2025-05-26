@@ -52,8 +52,8 @@ def tocar_som_blaster():
 def tocar_som_explosao():
     if som_explosao:
         try:
-            # Adiciona o tempo atual + 300ms à lista de explosões pendentes
-            explosoes_pendentes.append(pygame.time.get_ticks() + 300)
+            # Adiciona o tempo atual + 100ms à lista de explosões pendentes
+            explosoes_pendentes.append(pygame.time.get_ticks() + 100)
             print("Explosão agendada!")  # Debug print
         except Exception as e:
             print(f"Erro ao agendar som da explosão: {e}")  # Debug print com erro específico
@@ -110,8 +110,12 @@ def criar_explosao(explosoes, x, y):
     })
 
 def desenhar_texto(tela, texto, tamanho, x, y):
-    fonte = pygame.font.Font(None, tamanho)
-    texto_surface = fonte.render(texto, True, BRANCO)
+    # Tenta carregar uma fonte TTF personalizada, senão usa a padrão
+    try:
+        fonte = pygame.font.Font(os.path.join("assets", "Death Star.otf"), tamanho)
+    except:
+        fonte = pygame.font.Font(None, tamanho)
+    texto_surface = fonte.render(texto, True, AMARELO)
     texto_rect = texto_surface.get_rect(center=(x, y))
     tela.blit(texto_surface, texto_rect)
 
@@ -132,7 +136,7 @@ def criar_botao(tela, texto, x, y, largura, altura, cor_normal, cor_hover):
     
     # Desenha o texto do botão
     fonte = pygame.font.Font(None, 36)
-    texto_surface = fonte.render(texto, True, BRANCO)
+    texto_surface = fonte.render(texto, True, PRETO)
     texto_rect = texto_surface.get_rect(center=(x + largura/2, y + altura/2))
     tela.blit(texto_surface, texto_rect)
     return False
@@ -161,9 +165,9 @@ def tela_menu(tela):
         desenhar_texto(tela, f"RECORDE: {melhor_pontuacao}", 36, LARGURA // 2, ALTURA - 50)
         
         # Criar os três botões centralizados
-        botao_jogar = criar_botao(tela, "JOGAR", LARGURA//2 - 100, 250, 200, 50, VERDE, (0, 200, 0))
-        botao_naves = criar_botao(tela, "NAVES", LARGURA//2 - 100, 320, 200, 50, VERDE, (0, 200, 0))
-        botao_fundos = criar_botao(tela, "FUNDOS", LARGURA//2 - 100, 390, 200, 50, VERDE, (0, 200, 0))
+        botao_jogar = criar_botao(tela, "JOGAR", LARGURA//2 - 100, 250, 200, 50, AMARELO, (200, 200, 0))
+        botao_naves = criar_botao(tela, "NAVES", LARGURA//2 - 100, 320, 200, 50, AMARELO, (200, 200, 0))
+        botao_fundos = criar_botao(tela, "FUNDOS", LARGURA//2 - 100, 390, 200, 50, AMARELO, (200, 200, 0))
         
         # Adicionar texto no canto inferior direito
         fonte = pygame.font.Font(None, 24)
@@ -198,8 +202,8 @@ def selecionar_nave(tela):
     indice_atual = nave_selecionada
     
     while selecionando:
-        tela.fill(AZUL)
-        desenhar_texto(tela, "SELECIONE SUA NAVE", 50, LARGURA // 2, 100)
+        tela.fill(PRETO)
+        desenhar_texto(tela, "SELECIONE SUA NAVE", 30, LARGURA // 2, 100)
         
         # Desenhar nave atual
         if NAVE_IMGS:
@@ -214,7 +218,7 @@ def selecionar_nave(tela):
             desenhar_texto(tela, nome_nave, 30, LARGURA // 2, ALTURA // 2 + 100)
             
             # Desenhar instruções
-            desenhar_texto(tela, "← → para mudar", 24, LARGURA // 2, ALTURA // 2 + 150)
+            desenhar_texto(tela, "< > para mudar", 24, LARGURA // 2, ALTURA // 2 + 150)
             desenhar_texto(tela, "ENTER para confirmar", 24, LARGURA // 2, ALTURA // 2 + 180)
             desenhar_texto(tela, "ESC para voltar", 24, LARGURA // 2, ALTURA // 2 + 210)
         else:
@@ -243,8 +247,8 @@ def selecionar_fundo(tela):
     indice_atual = fundo_selecionado
     
     while selecionando:
-        tela.fill(AZUL)
-        desenhar_texto(tela, "SELECIONE O FUNDO", 50, LARGURA // 2, 100)
+        tela.fill(PRETO)
+        desenhar_texto(tela, "SELECIONE O FUNDO", 30, LARGURA // 2, 100)
         
         # Desenhar fundo atual
         if BG_IMGS:
@@ -258,11 +262,11 @@ def selecionar_fundo(tela):
             tela.blit(fundo_preview, rect)
             
             # Desenhar nome do fundo
-            nome_fundo = FUNDOS[indice_atual].replace("fundo_", "").replace(".png", "").upper()
+            nome_fundo = FUNDOS[indice_atual].replace("fundo_", "").replace(".png", "").replace("_", " ").upper()
             desenhar_texto(tela, nome_fundo, 30, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 30)
             
             # Desenhar instruções
-            desenhar_texto(tela, "← → para mudar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 70)
+            desenhar_texto(tela, "< > para mudar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 70)
             desenhar_texto(tela, "ENTER para confirmar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 100)
             desenhar_texto(tela, "ESC para voltar", 24, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 130)
         else:

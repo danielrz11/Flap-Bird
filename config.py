@@ -15,12 +15,12 @@ BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 
 # Configurações do jogo
-GRAVIDADE = 0.08  # Aproximadamente 1/6 da gravidade original (0.5)
-PULO = -4  # Reduzido pela metade para combinar com a gravidade menor
+GRAVIDADE = 0.08  
+PULO = -4  
 VELOCIDADE_CANO = 2
-VELOCIDADE_INIMIGO = 2.5  # Velocidade ligeiramente maior que os canos
+VELOCIDADE_INIMIGO = 2.5 
 DISTANCIA_ENTRE_CANOS = 300
-LARGURA_CANO = 70  # Aumentado de 70 para 100
+LARGURA_CANO = 70 
 
 # Configurações dos inimigos
 PROBABILIDADE_INIMIGO = 0.02  # 2% de chance de spawnar um inimigo a cada frame
@@ -59,8 +59,12 @@ NAVE_IMGS = []
 try:
     for nave in NAVES:
         img = pygame.image.load(os.path.join(ASSETS_DIR, nave))
-        # Ajustando o tamanho para ser aproximadamente igual ao círculo do pássaro (raio 20 = diâmetro 40)
-        img = pygame.transform.scale(img, (40, 40))  # Tamanho fixo de 40x40 pixels
+        # Mantém a proporção original, ajustando para que o maior lado seja 60 pixels
+        largura, altura = img.get_size()
+        escala = 60 / max(largura, altura)
+        novo_tamanho = (int(largura * escala), int(altura * escala))
+        img = pygame.transform.scale(img, novo_tamanho)
+
         NAVE_IMGS.append(img)
     print(f"Carregadas {len(NAVE_IMGS)} naves com sucesso!")
 except FileNotFoundError as e:
