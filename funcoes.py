@@ -209,7 +209,10 @@ def selecionar_nave(tela):
         if NAVE_IMGS:
             nave_img = NAVE_IMGS[indice_atual]
             # Desenhar a nave em tamanho maior para melhor visualização (3x o tamanho do jogo)
-            nave_grande = pygame.transform.scale(nave_img, (120, 120))
+            largura, altura = nave_img.get_size()
+            escala = 3
+            medidas = (largura*escala, altura*escala)
+            nave_grande = pygame.transform.scale(nave_img, medidas)
             rect = nave_grande.get_rect(center=(LARGURA // 2, ALTURA // 2))
             tela.blit(nave_grande, rect)
             
