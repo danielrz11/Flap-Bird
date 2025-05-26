@@ -60,12 +60,12 @@ def jogo():
                     elif evento.key == pygame.K_RIGHT:
                         # Criar novo tiro quando a seta direita é pressionada
                         tiros.append({
-                            'x': passaro_x + 40,  # Posição x do tiro (à direita da nave)
+                            'x': passaro_x + 20,  # Posição x do tiro (à direita da nave)
                             'y': passaro_y,       # Posição y do tiro (mesma altura da nave)
                             'largura': 20,        # Largura do tiro
                             'altura': 5           # Altura do tiro
                         })
-                        tocar_som_blaster()  # Tocar som do blaster ao atirar
+                        som_blaster.play()  # Tocar som do blaster ao atirar
 
             velocidade_y += gravidade
             passaro_y += velocidade_y
@@ -202,7 +202,7 @@ def jogo():
             if passaro_y > ALTURA or passaro_y < 0:
                 rodando = False
 
-            desenhar_pontuacao(TELA, pontuacao // 25)  # corre;'ao de bug | Dividindo a pontuação por 25
+            desenhar_texto(TELA, str(pontuacao // 25), 50, LARGURA // 2, 50)  # correção de bug | Dividindo a pontuação por 25
             pygame.display.update()
 
         except Exception as e:

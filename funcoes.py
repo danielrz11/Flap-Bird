@@ -42,13 +42,6 @@ except Exception as e:
     print(f"Erro ao carregar som da explosão: {e}")  # Debug print com erro específico
     som_explosao = None
 
-def tocar_som_blaster():
-    if som_blaster:
-        try:
-            som_blaster.play()
-        except:
-            print("Erro ao tocar som do blaster")
-
 def iniciar_musica_menu():
     try:
         pygame.mixer.music.load(os.path.join("assets", "inicial.mp3"))
@@ -64,12 +57,6 @@ def iniciar_musica_jogo():
         pygame.mixer.music.play(-1)  # -1 significa loop infinito
     except:
         print("Erro ao iniciar música do jogo")
-
-def parar_musica():
-    try:
-        pygame.mixer.music.stop()
-    except:
-        print("Erro ao parar música")
 
 def criar_cano():
     abertura = 200  # Espaço entre os canos
@@ -96,8 +83,8 @@ def desenhar_texto(tela, texto, tamanho, x, y):
     texto_rect = texto_surface.get_rect(center=(x, y))
     tela.blit(texto_surface, texto_rect)
 
-def desenhar_pontuacao(tela, pontuacao):
-    desenhar_texto(tela, str(pontuacao), 50, LARGURA // 2, 50)
+# def desenhar_pontuacao(tela, pontuacao):
+#     desenhar_texto(tela, str(pontuacao), 50, LARGURA // 2, 50)
 
 def criar_botao(tela, texto, x, y, largura, altura, cor_normal, cor_hover):
     mouse = pygame.mouse.get_pos()
@@ -156,7 +143,7 @@ def tela_menu(tela):
         
         # Verificar cliques nos botões
         if botao_jogar:
-            parar_musica()  # Parar música do menu
+            pygame.mixer.music.stop()  # Parar música do menu
             iniciar_musica_jogo()  # Iniciar música do jogo
             esperando = False
         elif botao_naves:
@@ -166,11 +153,11 @@ def tela_menu(tela):
             
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                parar_musica()  # Parar música ao sair
+                pygame.mixer.music.stop()  # Parar música ao sair
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                parar_musica()  # Parar música ao sair
+                pygame.mixer.music.stop()  # Parar música ao sair
                 pygame.quit()
                 exit()
 
@@ -208,7 +195,7 @@ def selecionar_nave(tela):
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                parar_musica()  # Parar música ao sair
+                pygame.mixer.music.stop()  # Parar música ao sair
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN:
@@ -256,7 +243,7 @@ def selecionar_fundo(tela):
         
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                parar_musica()  # Parar música ao sair
+                pygame.mixer.music.stop()  # Parar música ao sair
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN:
