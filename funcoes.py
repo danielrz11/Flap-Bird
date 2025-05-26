@@ -165,7 +165,10 @@ def selecionar_nave(tela):
     selecionando = True
     indice_atual = nave_selecionada
     
+    
     while selecionando:
+
+        indice_nave_atual = indice_atual
         tela.fill(PRETO)
         desenhar_texto(tela, "SELECIONE SUA NAVE", 30, LARGURA // 2, 100)
         
@@ -208,6 +211,7 @@ def selecionar_nave(tela):
                     indice_atual = (indice_atual + 1) % len(NAVE_IMGS)
                 elif evento.key == pygame.K_ESCAPE:
                     selecionando = False
+                    
 
 def selecionar_fundo(tela):
     selecionando = True

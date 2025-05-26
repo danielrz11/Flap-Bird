@@ -28,6 +28,9 @@ def jogo():
     contador_frames = 0  # Contador para controlar o spawn de inimigos
     explosoes = []  # Lista local para armazenar explosões
 
+    indice_nave_atual = 0
+
+    
     relogio = pygame.time.Clock()
     rodando = True
 
@@ -38,6 +41,10 @@ def jogo():
     # Obter o cano correspondente ao fundo
     cano_atual = get_cano_atual()
     cano_atual_inv = pygame.transform.rotate(cano_atual, 180) if cano_atual else None
+
+    if indice_nave_atual == 0:
+        velocidade_cano *= 1.5 # Aumenta a velocidade do cano para a nave X-Wing
+        
 
     while rodando:
         try:
@@ -86,7 +93,7 @@ def jogo():
                         som_explosao.play()
                         inimigos.remove(inimigo)
                         tiros.remove(tiro)
-                        pontuacao += 25  # Adiciona um ponto (25 pontos = 1 ponto na pontuação final)
+                        pontuacao += 1 
                         break
                 
                 # Remover tiros que saíram da tela
@@ -182,12 +189,9 @@ def jogo():
             # Verificar pontuação
             for cano in canos:
                 # Verifica se o jogador passou pelo cano
-                if cano['x'] + largura_cano < passaro_x:
-                    # Cria uma identificação única para cada cano usando sua posição inicial
-                    cano_id = f"{cano['x']}_{cano['topo']}_{cano['base']}"
-                    if cano_id not in canos_passados:
-                        pontuacao += 1
-                        canos_passados.add(cano_id)
+                if cano['x'] + largura_cano == passaro_x:
+                    pontuacao += 1
+                        
 
             # Verificar colisões
             
@@ -202,7 +206,7 @@ def jogo():
             if passaro_y > ALTURA or passaro_y < 0:
                 rodando = False
 
-            desenhar_texto(TELA, str(pontuacao // 25), 50, LARGURA // 2, 50)  # correção de bug | Dividindo a pontuação por 25
+            desenhar_texto(TELA, str(pontuacao), 50, LARGURA // 2, 50)  # correção de bug | Dividindo a pontuação por 25
             pygame.display.update()
 
         except Exception as e:
