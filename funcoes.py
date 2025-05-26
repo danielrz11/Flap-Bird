@@ -49,29 +49,6 @@ def tocar_som_blaster():
         except:
             print("Erro ao tocar som do blaster")
 
-def tocar_som_explosao():
-    if som_explosao:
-        try:
-            # Adiciona o tempo atual + 100ms à lista de explosões pendentes
-            explosoes_pendentes.append(pygame.time.get_ticks() + 100)
-            print("Explosão agendada!")  # Debug print
-        except Exception as e:
-            print(f"Erro ao agendar som da explosão: {e}")  # Debug print com erro específico
-    else:
-        print("Som da explosão não está disponível!")  # Debug print
-
-def atualizar_sons_explosao():
-    tempo_atual = pygame.time.get_ticks()
-    # Verifica todas as explosões pendentes
-    for tempo_explosao in explosoes_pendentes[:]:
-        if tempo_atual >= tempo_explosao:
-            try:
-                som_explosao.play()
-                print("Som da explosão tocado!")  # Debug print
-            except Exception as e:
-                print(f"Erro ao tocar som da explosão: {e}")  # Debug print com erro específico
-            explosoes_pendentes.remove(tempo_explosao)
-
 def iniciar_musica_menu():
     try:
         pygame.mixer.music.load(os.path.join("assets", "inicial.mp3"))

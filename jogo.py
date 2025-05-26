@@ -1,5 +1,6 @@
 import pygame
 import random
+import os
 pygame.init()  # Inicializa antes de qualquer uso de fonte
 
 from funcoes import *
@@ -80,11 +81,9 @@ def jogo():
                 for inimigo in inimigos[:]:
                     inimigo_rect = pygame.Rect(inimigo['x'], inimigo['y'], inimigo['largura'], inimigo['altura'])
                     if tiro_rect.colliderect(inimigo_rect):
-                        print("Colisão detectada! Iniciando explosão...")  # Debug print
                         # Criar explosão no centro do inimigo
                         criar_explosao(explosoes, inimigo['x'] + inimigo['largura']//2, inimigo['y'] + inimigo['altura']//2)
-                        print("Chamando som da explosão...")  # Debug print
-                        tocar_som_explosao()  # Tocar som da explosão
+                        som_explosao.play()
                         inimigos.remove(inimigo)
                         tiros.remove(tiro)
                         pontuacao += 25  # Adiciona um ponto (25 pontos = 1 ponto na pontuação final)
@@ -116,9 +115,6 @@ def jogo():
                     # Se houver qualquer erro com a explosão, remova-a
                     if explosao in explosoes:
                         explosoes.remove(explosao)
-
-            # Atualizar sons de explosão
-            atualizar_sons_explosao()
 
             # Limitar o número máximo de explosões
             if len(explosoes) > 10:
@@ -206,12 +202,32 @@ def jogo():
             if passaro_y > ALTURA or passaro_y < 0:
                 rodando = False
 
-            desenhar_pontuacao(TELA, pontuacao // 25)  # Dividindo a pontuação por 25
+            desenhar_pontuacao(TELA, pontuacao // 25)  # corre;'ao de bug | Dividindo a pontuação por 25
             pygame.display.update()
 
         except Exception as e:
             print(f"Erro no jogo: {e}")
             rodando = False
+
+            
+        if not rodando:
+            # Animação de explosão final (apenas a explosão, sem redesenhar nada)
+            explosion_folder = os.path.join("assets", "Circle_explosion")
+            explosion_imgs = []
+            for i in range(1, 11):  # Ajuste conforme o número de imagens
+                img_path = os.path.join(explosion_folder, f"Circle_explosion{i}.png")
+                if os.path.exists(img_path):
+                    img = pygame.image.load(img_path).convert_alpha()
+                    explosion_imgs.append(img)
+            nave_centro_x = passaro_x
+            nave_centro_y = int(passaro_y)
+            som_explosao.play()
+            for img in explosion_imgs:
+                rect = img.get_rect(center=(nave_centro_x, nave_centro_y))
+                TELA.blit(img, rect)
+                pygame.display.update()
+                pygame.time.delay(60)
+            pygame.time.delay(500)
 
     return pontuacao // 25  # Também retornando a pontuação dividida por 25
 
