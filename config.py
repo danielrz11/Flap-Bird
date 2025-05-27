@@ -18,14 +18,13 @@ PRETO = (0, 0, 0)
 GRAVIDADE = 0.08  
 PULO = -4  
 VELOCIDADE_CANO = 2
-VELOCIDADE_INIMIGO = 2.5 
+VELOCIDADE_INIMIGO = VELOCIDADE_CANO * 1.25
 DISTANCIA_ENTRE_CANOS = 300
 LARGURA_CANO = 70 
 
 # Configurações dos inimigos
 PROBABILIDADE_INIMIGO = 0.02  # 2% de chance de spawnar um inimigo a cada frame
-TEMPO_MIN_INIMIGO = 60  # Frames mínimos entre inimigos
-TEMPO_MAX_INIMIGO = 180  # Frames máximos entre inimigos
+#TEMPO_MAX_INIMIGO = 180  # Frames máximos entre inimigos
 
 # Carregando imagens
 ASSETS_DIR = "assets"
@@ -119,19 +118,19 @@ except pygame.error as e:
     PIPE_IMGS = []
 
 # Variável global para a nave selecionada
-nave_selecionada = 0
+indice_nave = 0
 fundo_selecionado = 0
 melhor_pontuacao = 0
 
 def get_nave_atual():
     """Retorna a imagem da nave atualmente selecionada"""
-    if NAVE_IMGS and 0 <= nave_selecionada < len(NAVE_IMGS):
-        return NAVE_IMGS[nave_selecionada]
+    if NAVE_IMGS and 0 <= indice_nave < len(NAVE_IMGS):
+        return NAVE_IMGS[indice_nave]
     return None
 
 def get_indice_nave_atual():
     """Retorna o índice da nave atualmente selecionada"""
-    return nave_selecionada
+    return indice_nave
 
 def get_fundo_atual():
     """Retorna a imagem do fundo atualmente selecionado"""
@@ -145,11 +144,11 @@ def get_cano_atual():
         return PIPE_IMGS[fundo_selecionado]
     return None
 
-def set_nave_selecionada(indice):
+def set_indice_nave(indice):
     """Define a nave selecionada"""
-    global nave_selecionada
+    global indice_nave
     if NAVE_IMGS:
-        nave_selecionada = indice % len(NAVE_IMGS)
+        indice_nave = indice % len(NAVE_IMGS)
 
 def set_fundo_selecionado(indice):
     """Define o fundo selecionado"""

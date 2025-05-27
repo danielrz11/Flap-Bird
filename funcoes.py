@@ -163,7 +163,7 @@ def tela_menu(tela):
 
 def selecionar_nave(tela):
     selecionando = True
-    global nave_selecionada
+    global indice_nave
     
     while selecionando:
         tela.fill(PRETO)
@@ -171,7 +171,7 @@ def selecionar_nave(tela):
         
         # Desenhar nave atual
         if NAVE_IMGS:
-            nave_img = NAVE_IMGS[nave_selecionada]
+            nave_img = NAVE_IMGS[indice_nave]
             # Desenhar a nave em tamanho maior para melhor visualização (3x o tamanho do jogo)
             largura, altura = nave_img.get_size()
             escala = 3
@@ -181,7 +181,7 @@ def selecionar_nave(tela):
             tela.blit(nave_grande, rect)
             
             # Desenhar nome da nave
-            nome_nave = NAVES[nave_selecionada].replace("nave_", "").replace(".png", "").upper()
+            nome_nave = NAVES[indice_nave].replace("nave_", "").replace(".png", "").upper()
             desenhar_texto(tela, nome_nave, 30, LARGURA // 2, ALTURA // 2 + 100)
             
             # Desenhar instruções
@@ -200,15 +200,15 @@ def selecionar_nave(tela):
                 exit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_RETURN:
-                    set_nave_selecionada(nave_selecionada)  # Salva a seleção
+                    set_indice_nave(indice_nave)  # Salva a seleção
                     selecionando = False
                 elif evento.key == pygame.K_LEFT and NAVE_IMGS:
-                    nave_selecionada = (nave_selecionada - 1) % len(NAVE_IMGS)
+                    indice_nave = (indice_nave - 1) % len(NAVE_IMGS)
                 elif evento.key == pygame.K_RIGHT and NAVE_IMGS:
-                    nave_selecionada = (nave_selecionada + 1) % len(NAVE_IMGS)
+                    indice_nave = (indice_nave + 1) % len(NAVE_IMGS)
                 elif evento.key == pygame.K_ESCAPE:
                     selecionando = False
-                    
+
                     
 
 def selecionar_fundo(tela):
