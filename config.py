@@ -34,7 +34,7 @@ NAVES = [
     "nave_mileniumfalcon.png",
     "nave_xwing.png",
     "nave_snowspeeder.png",
-    "nave_laranja.png"
+    "nave_naboo_starfighter.png"
 ]
 
 # Lista de fundos disponíveis
