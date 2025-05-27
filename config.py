@@ -33,7 +33,7 @@ ASSETS_DIR = "assets"
 NAVES = [
     "nave_mileniumfalcon.png",
     "nave_xwing.png",
-    "nave_cinza.png",
+    "nave_snowspeeder.png",
     "nave_laranja.png"
 ]
 

@@ -32,26 +32,20 @@ def jogo():
 
     # Obter a nave selecionada
     nave_atual = get_nave_atual()
-    indice_nave = get_indice_nave_atual()
+    nave_selecionada = get_indice_nave_atual()
     # Obter o fundo selecionado
     fundo_atual = get_fundo_atual()
     # Obter o cano correspondente ao fundo
     cano_atual = get_cano_atual()
     cano_atual_inv = pygame.transform.rotate(cano_atual, 180) if cano_atual else None
 
-    if nave_atual:
-        largura, altura = nave_atual.get_size()
-    else:
-        largura, altura = 40, 40  # valores padrão caso nave_atual seja None
-
-    if indice_nave == 0:
+    if nave_selecionada == 0:
          pulo *= 0.75
-    if indice_nave == 1:   
+    if nave_selecionada == 1:   
         velocidade_cano *= 2
-    if indice_nave == 2:
-        TEMPO_MIN_INIMIGO = 0
-        #PROBABILIDADE_INIMIGO = 0.04
-    if indice_nave == 3:
+    if nave_selecionada == 2:
+        passaro_x = 30
+    if nave_selecionada == 3:
         velocidade_tiro *= 5
 
     while rodando:
@@ -81,11 +75,10 @@ def jogo():
                             'altura': 5           # Altura do tiro
                         })
                         som_blaster.play()  # Tocar som do blaster ao atirar
-                    if indice_nave == 1:
-                        if evento.key == pygame.K_f:
-                            gravidade *= 2  # Aumentar a gravidade
-                    
-                if evento.type == pygame.KEYUP and indice_nave == 1:
+                if nave_selecionada == 1 and evento.type == pygame.KEYDOWN:
+                    if evento.key == pygame.K_f:
+                        gravidade *= 2  # Aumentar a gravidade
+                if evento.type == pygame.KEYUP and nave_selecionada == 1:
                     if evento.key == pygame.K_f:
                         gravidade /= 2
 
@@ -144,10 +137,6 @@ def jogo():
                 explosoes = explosoes[-10:]
 
             # Spawn de inimigos
-            if indice_nave == 1:    
-                TEMPO_MIN_INIMIGO = 30
-            else:
-                TEMPO_MIN_INIMIGO = 60
             if contador_frames >= TEMPO_MIN_INIMIGO:
                 if random.random() < PROBABILIDADE_INIMIGO:
                     inimigos.append({
@@ -160,7 +149,7 @@ def jogo():
 
             # Atualizar e desenhar inimigos
             for inimigo in inimigos[:]:
-                inimigo['x'] -= velocidade_cano * 1.25
+                inimigo['x'] -= VELOCIDADE_INIMIGO
                 # Desenhar inimigo
                 if INIMIGO_IMG:
                     try:
@@ -215,6 +204,7 @@ def jogo():
 
             # Verificar colisões
             
+            largura, altura = nave_atual.get_size()
             passaro_rect = pygame.Rect(passaro_x - largura/2, passaro_y - altura/2, largura, altura)
             for cano in canos:
                 cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
