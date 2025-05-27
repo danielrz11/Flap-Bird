@@ -21,30 +21,32 @@ def jogo():
     velocidade_y = 0
     canos = [criar_cano()]
     pontuacao = 0
-    canos_passados = set()  # Conjunto para rastrear canos já pontuados
     tiros = []  # Lista para armazenar os tiros
     velocidade_tiro = 10  # Velocidade dos tiros
     inimigos = []  # Lista para armazenar os inimigos
     contador_frames = 0  # Contador para controlar o spawn de inimigos
     explosoes = []  # Lista local para armazenar explosões
 
-    indice_nave_atual = 0
-
-    
     relogio = pygame.time.Clock()
     rodando = True
 
     # Obter a nave selecionada
     nave_atual = get_nave_atual()
+    nave_selecionada = get_indice_nave_atual()
     # Obter o fundo selecionado
     fundo_atual = get_fundo_atual()
     # Obter o cano correspondente ao fundo
     cano_atual = get_cano_atual()
     cano_atual_inv = pygame.transform.rotate(cano_atual, 180) if cano_atual else None
 
-    if indice_nave_atual == 0:
-        velocidade_cano *= 1.5 # Aumenta a velocidade do cano para a nave X-Wing
-        
+    if nave_selecionada == 0:
+         pulo *= 0.75
+    if nave_selecionada == 1:   
+        velocidade_cano *= 2
+    if nave_selecionada == 2:
+        passaro_x = 30
+    if nave_selecionada == 3:
+        velocidade_tiro *= 5
 
     while rodando:
         try:
@@ -64,7 +66,7 @@ def jogo():
                 if evento.type == pygame.KEYDOWN:
                     if evento.key == pygame.K_SPACE:
                         velocidade_y = pulo
-                    elif evento.key == pygame.K_RIGHT:
+                    if evento.key == pygame.K_RIGHT:
                         # Criar novo tiro quando a seta direita é pressionada
                         tiros.append({
                             'x': passaro_x + 20,  # Posição x do tiro (à direita da nave)
@@ -73,6 +75,13 @@ def jogo():
                             'altura': 5           # Altura do tiro
                         })
                         som_blaster.play()  # Tocar som do blaster ao atirar
+                if nave_selecionada == 1 and evento.type == pygame.KEYDOWN:
+                    if evento.key == pygame.K_f:
+                        gravidade *= 2  # Aumentar a gravidade
+                if evento.type == pygame.KEYUP and nave_selecionada == 1:
+                    if evento.key == pygame.K_f:
+                        gravidade /= 2
+
 
             velocidade_y += gravidade
             passaro_y += velocidade_y
@@ -213,7 +222,6 @@ def jogo():
             print(f"Erro no jogo: {e}")
             rodando = False
 
-            
         if not rodando:
             # Animação de explosão final (apenas a explosão, sem redesenhar nada)
             explosion_folder = os.path.join("assets", "Circle_explosion")
@@ -233,7 +241,7 @@ def jogo():
                 pygame.time.delay(60)
             pygame.time.delay(500)
 
-    return pontuacao // 25  # Também retornando a pontuação dividida por 25
+    return pontuacao
 
 # Loop principal
 while True:

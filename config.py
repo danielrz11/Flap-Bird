@@ -32,8 +32,8 @@ ASSETS_DIR = "assets"
 
 # Lista de naves disponíveis
 NAVES = [
-    "nave_xwing.png",
     "nave_mileniumfalcon.png",
+    "nave_xwing.png",
     "nave_cinza.png",
     "nave_laranja.png"
 ]
@@ -41,10 +41,10 @@ NAVES = [
 # Lista de fundos disponíveis
 FUNDOS = [
     "fundo_estrela da morte.png",
-    "fundo_planeta_vermellho.png",
-    "fundo_planeta_laranja.png",
-    "fundo_planeta_azul.png",
-    "fundo_nave_grande.png"
+    "fundo_Coruscant.png",
+    "fundo_Tatooine.png",
+    "fundo_Naboo.png",
+    "fundo_Star_Destroyer.png"
 ]
 
 # Lista de canos correspondentes aos fundos
@@ -128,6 +128,10 @@ def get_nave_atual():
     if NAVE_IMGS and 0 <= nave_selecionada < len(NAVE_IMGS):
         return NAVE_IMGS[nave_selecionada]
     return None
+
+def get_indice_nave_atual():
+    """Retorna o índice da nave atualmente selecionada"""
+    return nave_selecionada
 
 def get_fundo_atual():
     """Retorna a imagem do fundo atualmente selecionado"""

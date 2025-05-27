@@ -163,18 +163,15 @@ def tela_menu(tela):
 
 def selecionar_nave(tela):
     selecionando = True
-    indice_atual = nave_selecionada
-    
+    global nave_selecionada
     
     while selecionando:
-
-        indice_nave_atual = indice_atual
         tela.fill(PRETO)
         desenhar_texto(tela, "SELECIONE SUA NAVE", 30, LARGURA // 2, 100)
         
         # Desenhar nave atual
         if NAVE_IMGS:
-            nave_img = NAVE_IMGS[indice_atual]
+            nave_img = NAVE_IMGS[nave_selecionada]
             # Desenhar a nave em tamanho maior para melhor visualização (3x o tamanho do jogo)
             largura, altura = nave_img.get_size()
             escala = 3
@@ -184,7 +181,7 @@ def selecionar_nave(tela):
             tela.blit(nave_grande, rect)
             
             # Desenhar nome da nave
-            nome_nave = NAVES[indice_atual].replace("nave_", "").replace(".png", "").upper()
+            nome_nave = NAVES[nave_selecionada].replace("nave_", "").replace(".png", "").upper()
             desenhar_texto(tela, nome_nave, 30, LARGURA // 2, ALTURA // 2 + 100)
             
             # Desenhar instruções
@@ -203,14 +200,15 @@ def selecionar_nave(tela):
                 exit()
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_RETURN:
-                    set_nave_selecionada(indice_atual)  # Salva a seleção
+                    set_nave_selecionada(nave_selecionada)  # Salva a seleção
                     selecionando = False
                 elif evento.key == pygame.K_LEFT and NAVE_IMGS:
-                    indice_atual = (indice_atual - 1) % len(NAVE_IMGS)
+                    nave_selecionada = (nave_selecionada - 1) % len(NAVE_IMGS)
                 elif evento.key == pygame.K_RIGHT and NAVE_IMGS:
-                    indice_atual = (indice_atual + 1) % len(NAVE_IMGS)
+                    nave_selecionada = (nave_selecionada + 1) % len(NAVE_IMGS)
                 elif evento.key == pygame.K_ESCAPE:
                     selecionando = False
+                    
                     
 
 def selecionar_fundo(tela):
@@ -233,7 +231,7 @@ def selecionar_fundo(tela):
             tela.blit(fundo_preview, rect)
             
             # Desenhar nome do fundo
-            nome_fundo = FUNDOS[indice_atual].replace("fundo_", "").replace(".png", "").replace("_", " ").upper()
+            nome_fundo = FUNDOS[indice_atual].replace("fundo_", "").replace(".png", "").replace("_", " ")
             desenhar_texto(tela, nome_fundo, 30, LARGURA // 2, ALTURA // 2 + preview_altura//2 + 30)
             
             # Desenhar instruções
