@@ -260,5 +260,52 @@ def selecionar_fundo(tela):
                     selecionando = False
 
 def tela_game_over(tela, pontuacao):
-    # Removida a tela de game over, retorna imediatamente
-    return
+    esperando = True
+    
+    # Carregar imagem de fundo do game over
+    try:
+        fundo_game_over = pygame.image.load(os.path.join("assets", "tela de início.png"))
+        fundo_game_over = pygame.transform.scale(fundo_game_over, (LARGURA, ALTURA))
+    except:
+        fundo_game_over = None
+
+    while esperando:
+        # Desenhar fundo
+        if fundo_game_over:
+            tela.blit(fundo_game_over, (0, 0))
+        else:
+            tela.fill(PRETO)
+        
+        # Desenhar título e pontuação na parte inferior
+        desenhar_texto(tela, "GAME OVER", 60, LARGURA // 2, ALTURA - 300)
+        desenhar_texto(tela, f"Pontuacao: {pontuacao}", 36, LARGURA // 2, ALTURA - 200)
+        
+        # Mostrar melhor pontuação
+        melhor_pontuacao = get_melhor_pontuacao()
+        if pontuacao > melhor_pontuacao:
+            desenhar_texto(tela, "NOVO RECORDE!", 30, LARGURA // 2, ALTURA - 150)
+        else:
+            desenhar_texto(tela, f"Recorde: {melhor_pontuacao}", 30, LARGURA // 2, ALTURA - 150)
+        
+        # Criar botão do menu principal
+        botao_menu = criar_botao(tela, "MENU PRINCIPAL", LARGURA//2 - 150, ALTURA - 100, 300, 50, AMARELO, (200, 200, 0))
+        
+        # Adicionar texto no canto inferior direito
+        fonte = pygame.font.Font(None, 24)
+        texto_surface = fonte.render("APERTE ESC PARA SAIR", True, BRANCO)
+        texto_rect = texto_surface.get_rect(bottomright=(LARGURA - 10, ALTURA - 10))
+        tela.blit(texto_surface, texto_rect)
+        
+        pygame.display.update()
+        
+        # Verificar cliques nos botões
+        if botao_menu:
+            return "menu"  # Retorna para o menu principal
+            
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+                pygame.quit()
+                exit()

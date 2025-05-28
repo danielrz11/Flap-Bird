@@ -24,6 +24,7 @@ LARGURA_CANO = 70
 
 # Configurações dos inimigos
 PROBABILIDADE_INIMIGO = 0.02  # 2% de chance de spawnar um inimigo a cada frame
+TEMPO_MIN_INIMIGO = 60  # Frames mínimos entre inimigos
 #TEMPO_MAX_INIMIGO = 180  # Frames máximos entre inimigos
 
 # Carregando imagens

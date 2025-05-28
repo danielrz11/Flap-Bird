@@ -198,35 +198,41 @@ def jogo():
             # Verificar pontuação
             for cano in canos:
                 # Verifica se o jogador passou pelo cano
-                if cano['x'] + largura_cano == passaro_x:
+                if cano['x'] + largura_cano < passaro_x and not cano.get('pontuado', False):
                     pontuacao += 1
-                        
+                    cano['pontuado'] = True
 
             # Verificar colisões
-            
-            largura, altura = nave_atual.get_size()
-            passaro_rect = pygame.Rect(passaro_x - largura/2, passaro_y - altura/2, largura, altura)
+            if nave_atual:
+                largura, altura = nave_atual.get_size()
+                passaro_rect = pygame.Rect(passaro_x - largura/2, passaro_y - altura/2, largura, altura)
+            else:
+                # Se não houver nave, usar um retângulo padrão
+                passaro_rect = pygame.Rect(passaro_x - 20, passaro_y - 20, 40, 40)
+                
+            colisao = False
             for cano in canos:
                 cano_superior = pygame.Rect(cano['x'], 0, largura_cano, cano['topo'])
                 cano_inferior = pygame.Rect(cano['x'], cano['base'], largura_cano, ALTURA - cano['base'])
                 if passaro_rect.colliderect(cano_superior) or passaro_rect.colliderect(cano_inferior):
+                    colisao = True
                     rodando = False
 
             if passaro_y > ALTURA or passaro_y < 0:
                 rodando = False
 
-            desenhar_texto(TELA, str(pontuacao), 50, LARGURA // 2, 50)  # correção de bug | Dividindo a pontuação por 25
+            desenhar_texto(TELA, str(pontuacao), 50, LARGURA // 2, 50)
             pygame.display.update()
 
         except Exception as e:
             print(f"Erro no jogo: {e}")
             rodando = False
 
-        if not rodando:
-            # Animação de explosão final (apenas a explosão, sem redesenhar nada)
+        if not rodando and colisao:  # Só mostra a explosão se houve colisão com cano
+            # Animação de explosão final
             explosion_folder = os.path.join("assets", "Circle_explosion")
             explosion_imgs = []
-            for i in range(1, 11):  # Ajuste conforme o número de imagens
+            for i in range(1, 11):
                 img_path = os.path.join(explosion_folder, f"Circle_explosion{i}.png")
                 if os.path.exists(img_path):
                     img = pygame.image.load(img_path).convert_alpha()
@@ -248,6 +254,9 @@ while True:
     tela_menu(TELA)
     pontos = jogo()
     set_melhor_pontuacao(pontos)
+    resultado = tela_game_over(TELA, pontos)
+    if resultado == "menu":
+        continue  # Volta para o menu principal
     if pontos > melhor_pontuacao:
         melhor_pontuacao = pontos
         print(f"Novo recorde: {melhor_pontuacao}")
