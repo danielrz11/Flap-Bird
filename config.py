@@ -123,6 +123,7 @@ indice_nave = 0
 fundo_selecionado = 0
 melhor_pontuacao = 0
 
+### Inicio do Copilot
 def get_nave_atual():
     """Retorna a imagem da nave atualmente selecionada"""
     if NAVE_IMGS and 0 <= indice_nave < len(NAVE_IMGS):
@@ -165,4 +166,6 @@ def set_melhor_pontuacao(pontos):
     """Define a melhor pontuação"""
     global melhor_pontuacao
     if pontos > melhor_pontuacao:
-        melhor_pontuacao = pontos 
+        melhor_pontuacao = pontos
+        
+### final do Copilot

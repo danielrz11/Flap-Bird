@@ -50,9 +50,10 @@ def jogo():
     if indice_nave == 1:
         passaro_x = 30
     if indice_nave == 2:
-        velocidade_tiro *= 5
+        velocidade_tiro *= 4
     if indice_nave == 3:   
         velocidade_cano *= 2
+        velocidade_tiro *= 2
 
     while rodando:
         try:
