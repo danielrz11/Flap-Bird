@@ -43,6 +43,7 @@ def jogo():
          pulo *= 0.75
     if nave_selecionada == 1:   
         velocidade_cano *= 2
+        VELOCIDADE_INIMIGO = velocidade_cano * 1.5  # Make enemies 50% faster than pipes
     if nave_selecionada == 2:
         passaro_x = 30
     if nave_selecionada == 3:
