@@ -47,12 +47,12 @@ def jogo():
 
     if indice_nave == 0:
          pulo *= 0.75
-    if indice_nave == 1:   
-        velocidade_cano *= 1.75
-    if indice_nave == 2:
+    if indice_nave == 1:
         passaro_x = 30
-    if indice_nave == 3:
+    if indice_nave == 2:
         velocidade_tiro *= 5
+    if indice_nave == 3:   
+        velocidade_cano *= 2
 
     while rodando:
         try:
@@ -81,11 +81,11 @@ def jogo():
                             'altura': 5           # Altura do tiro
                         })
                         som_blaster.play()  # Tocar som do blaster ao atirar
-                    if indice_nave == 1:
+                    if indice_nave == 3:
                         if evento.key == pygame.K_f:
                             gravidade *= 2  # Aumentar a gravidade
                     
-                if evento.type == pygame.KEYUP and indice_nave == 1:
+                if evento.type == pygame.KEYUP and indice_nave == 3:
                     if evento.key == pygame.K_f:
                         gravidade /= 2
 

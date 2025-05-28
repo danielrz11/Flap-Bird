@@ -185,9 +185,11 @@ def selecionar_nave(tela):
             desenhar_texto(tela, nome_nave, 30, LARGURA // 2, ALTURA // 2 + 100)
             
             # Desenhar instruções
-            desenhar_texto(tela, "< > para mudar", 24, LARGURA // 2, ALTURA // 2 + 150)
-            desenhar_texto(tela, "ENTER para confirmar", 24, LARGURA // 2, ALTURA // 2 + 180)
-            desenhar_texto(tela, "ESC para voltar", 24, LARGURA // 2, ALTURA // 2 + 210)
+            if indice_nave == 3:
+                desenhar_texto(tela, "Modo dificil!   Use a Forca (F)", 24, LARGURA // 2, ALTURA // 2 + 150)
+            desenhar_texto(tela, "< > para mudar", 24, LARGURA // 2, ALTURA // 2 + 180)
+            desenhar_texto(tela, "ENTER para confirmar", 24, LARGURA // 2, ALTURA // 2 + 210)
+            desenhar_texto(tela, "ESC para voltar", 24, LARGURA // 2, ALTURA // 2 + 230)
         else:
             desenhar_texto(tela, "Nenhuma nave disponível", 30, LARGURA // 2, ALTURA // 2)
         
@@ -306,6 +308,9 @@ def tela_game_over(tela, pontuacao):
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                pygame.quit()
-                exit()
+            if evento.type == pygame.KEYDOWN: 
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
+                if evento.key == pygame.K_SPACE:
+                    return "menu"

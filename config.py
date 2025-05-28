@@ -32,15 +32,15 @@ ASSETS_DIR = "assets"
 
 # Lista de naves disponíveis
 NAVES = [
-    "nave_mileniumfalcon.png",
-    "nave_xwing.png",
-    "nave_snowspeeder.png",
-    "nave_naboo_starfighter.png"
+    "nave_Milenium_Falcon.png",
+    "nave_Snowspeeder.png",
+    "nave_Naboo_Starfighter.png",
+    "nave_X-wing.png"
 ]
 
 # Lista de fundos disponíveis
 FUNDOS = [
-    "fundo_estrela da morte.png",
+    "fundo_Estrela_da_morte.png",
     "fundo_Coruscant.png",
     "fundo_Tatooine.png",
     "fundo_Naboo.png",
