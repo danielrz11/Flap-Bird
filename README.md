@@ -23,7 +23,7 @@ Dicas:
 - A X-wing é a nave mais rápida, se voce quiser desviar de todos canos será necessario usar a força (F)
 
 Link do video:
-  ...
+  https://alinsperedu-my.sharepoint.com/:v:/g/personal/danielr11_al_insper_edu_br/ERAR4voGN-NNntC6iow2GIkB-6vzXWIfXnWlmm4aWHDreA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=IdxhL1
 
 Para rodar o jogo sera necessario ter o Pygame instalado.
 Se voce ainda não o possui abra o terminal no mesmo diretorio do interprete de python e digite:
